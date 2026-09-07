@@ -1,6 +1,5 @@
 package se331.lab7.controller;
 
-import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,101 +10,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import se331.lab7.entity.Event;
 
-import jakarta.annotation.PostConstruct;
-import java.util.ArrayList;
+import se331.lab7.entity.Organizer;
+import se331.lab7.service.EventService;
+import se331.lab7.service.OrganizerService;
+import se331.lab7.service.OrganizerServiceImpl;
+
 import java.util.List;
 
 @RestController
 public class EventController {
-    List<Event> eventList;
 
-    @PostConstruct
-    public void init() {
-        eventList = new ArrayList<>();
-        eventList.add(Event.builder()
-                .id(123L)
-                .category("animal wellfare")
-                .description("Fimd your new feline friend at this event")
-                .location("Meow Town")
-                .date("January 28, 2022")
-                .time("12:00")
-                .petsAllowed(true)
-                .organizer("Kat Laydee")
-                .build());
-        eventList.add(Event.builder()
-                .id(456L)
-                .category("food")
-                .title("Community Gardening")
-                .description("Join us as we tend to the community edible plants")
-                .location("Flora City")
-                .date("March 14, 2022")
-                .time("10:00")
-                .petsAllowed(true)
-                .organizer("Fern Pollin")
-                .build());
-        eventList.add(Event.builder()
-                .id(789L)
-                .category("sustainability")
-                .title("Beach Cleanup")
-                .description("Help pick up trash along the shore.")
-                .location("Playa Del Carmen")
-                .date("July 22, 2022")
-                .time("11:00")
-                .petsAllowed(false)
-                .organizer("Carey Wales")
-                .build());
-        eventList.add(Event.builder()
-                .id(1001L)
-                .category("animal welfare")
-                .title("Dog Adoption Day")
-                .description("Find your new canine friend at this event.")
-                .location("Woof Town")
-                .date("August 28, 2022")
-                .time("12:00")
-                .petsAllowed(true)
-                .organizer("Dawg Dahd")
-                .build());
-        eventList.add(Event.builder()
-                .id(1002L)
-                .category("food")
-                .title("Canned Food Drive")
-                .description("Bring your canned food to donate to those in need.")
-                .location("Tin City")
-                .date("September 14, 2022")
-                .time("3:00")
-                .petsAllowed(true)
-                .organizer("Kahn Opiner")
-                .build());
-        eventList.add(Event.builder()
-                .id(1003L)
-                .category("sustainability")
-                .title("Highway Cleanup")
-                .description("Help pick up trash along the highway.")
-                .location("Highway 50")
-                .date("July 22, 2022")
-                .time("11:00")
-                .petsAllowed(false)
-                .organizer("Brody Kill")
-                .build());
-    }
+    final EventService eventService;
+    final OrganizerService organizerService;
 
-    public void setEventList(List<Event> eventList) {
-        this.eventList = eventList;
+    public EventController(EventService eventService, OrganizerService organizerService) {
+        this.eventService = eventService;
+        this.organizerService = organizerService;
     }
 
     @GetMapping("/events")
     public ResponseEntity<?> getEventList(@RequestParam(value = "_limit", required = false) Integer perPage
             , @RequestParam(value = "_page", required = false) Integer page) {
-        perPage = perPage == null ? eventList.size() : perPage;
-        page = page == null ? 1 : page;
-        Integer firstIndex = (page - 1) * perPage;
-        List<Event> output = new ArrayList<>();
+        List<Event> output = null;
+        Integer eventSize = eventService.getEventSize();
         HttpHeaders responseHeader = new HttpHeaders();
-        responseHeader.set("x-total-count", String.valueOf(eventList.size()));
+        responseHeader.set("x-total-count", String.valueOf(eventSize));
         try {
-            for (int i = firstIndex; i < firstIndex + perPage; i++) {
-                output.add(eventList.get(i));
-            }
+            output = eventService.getEvents(perPage, page);
             return ResponseEntity.ok().headers(responseHeader).body(output);
         } catch (IndexOutOfBoundsException ex) {
             return ResponseEntity.ok().headers(responseHeader).body(output);
@@ -114,17 +45,21 @@ public class EventController {
 
     @GetMapping("events/{id}")
     public ResponseEntity<?> getEvent(@PathVariable("id") Long id) {
-        Event output = null;
-        for (Event event : eventList) {
-            if (event.getId().equals(id)) {
-                output = event;
-                break;
-            }
-        }
+        Event output = eventService.getEvent(id);
         if (output != null) {
             return ResponseEntity.ok(output);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The given id is not found");
+        }
+    }
+
+    @GetMapping("organizer/{id}")
+    public ResponseEntity<?> getOrganizer(@PathVariable("id") Long id) {
+        Organizer output = organizerService.getOrganizer(id);
+        if (output != null) {
+            return ResponseEntity.ok(output);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The given id is not found");
         }
     }
 }
