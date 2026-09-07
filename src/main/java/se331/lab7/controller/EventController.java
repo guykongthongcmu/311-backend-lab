@@ -108,7 +108,7 @@ public class EventController {
             return ResponseEntity.ok(output);
         }
     }
-    
+
     @GetMapping("events/{id}")
     public ResponseEntity<?> getEvent(@PathVariable("id") Long id) {
         Event output = null;
