@@ -1,59 +1,25 @@
 package se331.lab7.dao;
 
-import jakarta.annotation.PostConstruct;
-import org.springframework.context.annotation.Profile;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import se331.lab7.entity.Organizer;
+import se331.lab7.repository.OrganizerRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Repository
-@Profile("memory")
+@RequiredArgsConstructor
 public class OrganizerDaoImpl implements OrganizerDao {
-    List<Organizer> organizerList;
-
-    @PostConstruct
-    public void init() {
-        organizerList = new ArrayList<>();
-        organizerList.add(Organizer.builder()
-                .id(100L)
-                .name("Good Morning Org")
-                .address("Hang Dong Chiang Mai")
-                .build());
-        organizerList.add(Organizer.builder()
-                .id(200L)
-                .name("Good Night Org")
-                .address("Suan Dok, Chiang Mai")
-                .build());
+    final OrganizerRepository organizerRepository;
+    @Override
+    public Page<Organizer> getOrganizer(Pageable pageRequest) {
+        return organizerRepository.findAll(pageRequest);
     }
 
     @Override
-    public Integer getOrganizerSize() {
-        return organizerList.size();
+    public Optional<Organizer> findById(Long id) {
+        return organizerRepository.findById(id);
     }
-
-    @Override
-    public Page<Organizer> getOrganizer(Integer pageSize, Integer page) {
-        pageSize = pageSize == null ? organizerList.size() : pageSize;
-        page = page == null ? 1 : page;
-        int firstIndex = (page - 1) * pageSize;
-        return new PageImpl<Organizer>(organizerList.subList(firstIndex, firstIndex + pageSize), PageRequest.of(page - 1, pageSize), organizerList.size());
-    }
-
-    @Override
-    public Organizer getOrganizer(Long id) {
-        return organizerList.stream().filter(event -> event.getId().equals(id)).findFirst().orElse(null);
-    }
-
-    @Override
-    public Organizer save(Organizer organizer) {
-        organizer.setId(organizerList.get(organizerList.size() - 1).getId() + 1);
-        organizerList.add(organizer);
-        return organizer;
-    }
-
 }

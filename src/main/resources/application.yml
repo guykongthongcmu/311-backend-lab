@@ -1,6 +1,9 @@
 spring:
   application:
     name: 331-backend
+    mvc:
+      problemdetials:
+        enabled: true
   profiles:
     active:
       - db
