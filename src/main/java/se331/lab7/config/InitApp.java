@@ -80,6 +80,137 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
         org3.getOwnEvents().add(event4);
         eventRepository.save(event4);
 
+        Event event5, event6, event7, event8, event9, event10, event11, event12, event13, event14;
+        event5 = eventRepository.save(Event.builder()
+                .category("Academic")
+                .title("Final Exam")
+                .description("A time for taking the final exam")
+                .location("CAMT Building")
+                .date("15th Dec")
+                .time("9.00-12.00 am.")
+                .petsAllowed(false)
+                .build());
+        event5.setOrganizer(org1);
+        org1.getOwnEvents().add(event5);
+        eventRepository.save(event5);
+
+        event6 = eventRepository.save(Event.builder()
+                .category("Workshop")
+                .title("AI Workshop")
+                .description("Hands-on session on machine learning")
+                .location("CAMT Building")
+                .date("10th Oct")
+                .time("1.00-4.00 pm.")
+                .petsAllowed(false)
+                .build());
+        event6.setOrganizer(org1);
+        org1.getOwnEvents().add(event6);
+        eventRepository.save(event6);
+
+        event7 = eventRepository.save(Event.builder()
+                .category("Sports")
+                .title("CMU Sports Day")
+                .description("Annual sports competition")
+                .location("CMU Stadium")
+                .date("5th Feb")
+                .time("8.00am-5.00 pm.")
+                .petsAllowed(false)
+                .build());
+        event7.setOrganizer(org2);
+        org2.getOwnEvents().add(event7);
+        eventRepository.save(event7);
+
+        event8 = eventRepository.save(Event.builder()
+                .category("Career")
+                .title("CMU Job Fair")
+                .description("Meet companies hiring for internships and jobs")
+                .location("CMU Convention hall")
+                .date("18th Mar")
+                .time("9.00am-4.00 pm.")
+                .petsAllowed(false)
+                .build());
+        event8.setOrganizer(org2);
+        org2.getOwnEvents().add(event8);
+        eventRepository.save(event8);
+
+        event9 = eventRepository.save(Event.builder()
+                .category("Cultural")
+                .title("Yi Peng Lantern Festival")
+                .description("A time for releasing lanterns")
+                .location("Ping River")
+                .date("15th Nov")
+                .time("6.00-9.00 pm.")
+                .petsAllowed(false)
+                .build());
+        event9.setOrganizer(org2);
+        org2.getOwnEvents().add(event9);
+        eventRepository.save(event9);
+
+        event10 = eventRepository.save(Event.builder()
+                .category("Cultural")
+                .title("Chiang Mai Flower Festival")
+                .description("A time for flower parade")
+                .location("Chiang Mai Moat")
+                .date("1st Feb")
+                .time("8.00am-6.00 pm.")
+                .petsAllowed(true)
+                .build());
+        event10.setOrganizer(org3);
+        org3.getOwnEvents().add(event10);
+        eventRepository.save(event10);
+
+        event11 = eventRepository.save(Event.builder()
+                .category("Market")
+                .title("Chiang Mai Night Market")
+                .description("A time for shopping local crafts")
+                .location("Chiang Mai Night Bazaar")
+                .date("Every Fri-Sun")
+                .time("6.00-11.00 pm.")
+                .petsAllowed(true)
+                .build());
+        event11.setOrganizer(org3);
+        org3.getOwnEvents().add(event11);
+        eventRepository.save(event11);
+
+        event12 = eventRepository.save(Event.builder()
+                .category("Music")
+                .title("Chiang Mai Music Festival")
+                .description("Live music from local bands")
+                .location("Chiang Mai Moat")
+                .date("22nd Jun")
+                .time("5.00-10.00 pm.")
+                .petsAllowed(true)
+                .build());
+        event12.setOrganizer(org3);
+        org3.getOwnEvents().add(event12);
+        eventRepository.save(event12);
+
+        event13 = eventRepository.save(Event.builder()
+                .category("Academic")
+                .title("Open House")
+                .description("A time for prospective students to visit CAMT")
+                .location("CAMT Building")
+                .date("20th Aug")
+                .time("9.00am-3.00 pm.")
+                .petsAllowed(false)
+                .build());
+        event13.setOrganizer(org1);
+        org1.getOwnEvents().add(event13);
+        eventRepository.save(event13);
+
+        event14 = eventRepository.save(Event.builder()
+                .category("Cultural")
+                .title("New Year Countdown")
+                .description("A time for celebrating the new year")
+                .location("CMU Convention hall")
+                .date("31st Dec")
+                .time("9.00pm-1.00 am.")
+                .petsAllowed(false)
+                .build());
+        event14.setOrganizer(org2);
+        org2.getOwnEvents().add(event14);
+        eventRepository.save(event14);
+
         participantRepository.save(Participant.builder()
                 .name("Alice Somsri")
                 .telNo("081-111-1111")
