@@ -1,5 +1,6 @@
 package se331.lab7.controller;
 
+import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import se331.lab7.entity.Event;
 import se331.lab7.service.EventService;
+import se331.lab7.util.LabMapper;
 
 @RestController
 public class EventController {
@@ -33,7 +35,7 @@ public class EventController {
         HttpHeaders responseHeader = new HttpHeaders();
         responseHeader.set("x-total-count", String.valueOf(pageOutput.getTotalElements()));
         try {
-            return ResponseEntity.ok().headers(responseHeader).body(pageOutput.getContent());
+            return new ResponseEntity<>(LabMapper.INSTANCE.getEventDto(pageOutput.getContent()), responseHeader, HttpStatus.OK);
         } catch (IndexOutOfBoundsException e ) {
             return ResponseEntity.ok().headers(responseHeader).body(pageOutput.getContent());
         }
@@ -43,7 +45,7 @@ public class EventController {
     public ResponseEntity<?> getEvent(@PathVariable("id") Long id) {
         Event output = eventService.getEvent(id);
         if (output != null) {
-            return ResponseEntity.ok(output);
+            return ResponseEntity.ok(LabMapper.INSTANCE.getEventDto(output));
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The given id is not found");
         }
@@ -53,6 +55,6 @@ public class EventController {
     @PostMapping("/events/")
     public ResponseEntity<?> addEvent(@RequestBody Event event) {
         Event output = eventService.save(event);
-        return ResponseEntity.ok(output);
+        return ResponseEntity.ok(LabMapper.INSTANCE.getEventDto(output));
     }
 }
