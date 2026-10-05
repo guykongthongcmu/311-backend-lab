@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import se331.lab7.util.StorageFileDto;
 import se331.lab7.util.SupabaseStorageService;
 
 @Controller
@@ -15,10 +16,10 @@ public class SupabaseController {
     final SupabaseStorageService supabaseStorageService;
 
     @PostMapping("/uploadFile")
-    public ResponseEntity<String> uploadFile(@RequestParam("file")MultipartFile file) {
+    public ResponseEntity<?> uploadFile(@RequestParam("image")MultipartFile file) {
         try {
             String fileUrl = supabaseStorageService.uploadFile(file);
-            return ResponseEntity.ok(fileUrl);
+            return ResponseEntity.ok(StorageFileDto.builder().name(fileUrl).build());
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error uploading file: " + e.getMessage());
         }
@@ -31,6 +32,16 @@ public class SupabaseController {
             return ResponseEntity.ok(presignedUrl);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error generating presigned url: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/uploadImage")
+    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file) {
+        try {
+            StorageFileDto fileUrl = supabaseStorageService.uploadImage(file);
+            return ResponseEntity.ok(fileUrl);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error uploading file: " + e.getMessage());
         }
     }
 }
