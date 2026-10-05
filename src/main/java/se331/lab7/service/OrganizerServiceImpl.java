@@ -23,4 +23,14 @@ public class OrganizerServiceImpl implements OrganizerService {
     public Page<Organizer> getOrganizer(Integer page, Integer pageSize) {
         return organizerDao.getOrganizer(PageRequest.of(page, pageSize));
     }
+
+    @Override
+    public Organizer getOrganizer(Long id) {
+        return organizerDao.findById(id).orElse(null);
+    }
+
+    @Override
+    public Organizer save(Organizer organizer) {
+        return organizerDao.save(organizer);
+    }
 }

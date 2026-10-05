@@ -6,6 +6,8 @@ import se331.lab7.entity.Event;
 
 import java.util.List;
 
+import static org.springframework.data.core.PropertyReferenceExtensionsKt.then;
+
 public interface EventService {
     Integer getEventSize();
     Page<Event> getEvents(Integer pageSize, Integer page);

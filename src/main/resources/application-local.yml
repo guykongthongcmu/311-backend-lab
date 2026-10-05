@@ -1,0 +1,7 @@
+supabase:
+  storage:
+    endpoint: https://amnkqgcauzutqasprasw.storage.supabase.co/storage/v1/s3
+    bucket: se-331-lab11
+    region: ap-northeast-1
+    accessKey: 030582fcae3403db0391e9b6838cf1be
+    secretKey: 2623523eabb86cc4d9d5300dd4d1ceb2abfabf75cc52cc4d6ce3a4f3bf61db97
